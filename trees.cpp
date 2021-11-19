@@ -1,6 +1,7 @@
 //create a binary search tree
 #include<iostream>
 #include<conio.h>
+#include<queue>
 using namespace std;
 
 
@@ -77,30 +78,52 @@ BST* BST::SearchNode(BST *root, int val)
     }
     else if ( val < root->data )
     {
-        return SearchNode(root->left,val);
+        return SearchNode(root->left,val); //not sure why use return here
     }
     else
     {
-        return SearchNode(root->right,val);
+         return SearchNode(root->right,val);//not sure why use return here
     }
 }
  
-void breadthFirstTraversal(BST *root)
+void BST::breadthFirstTraversal(BST *root)
 {
+    if (root==nullptr) return;
+    //first push all elements into the queue
+    queue<BST*> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        BST *bNode = q.front();
+        cout<<bNode->getdata()<<" ";
 
+        if (bNode->left)
+        {
+            q.push(bNode->left);
+        }
+        
+        if (bNode->right)
+        {
+            q.push(bNode->right);
+        }
+        q.pop();
+    }
 }
 
 int main()
 {
     BST b, *root=nullptr;
-    root = b.InsertNode(root,5);
+    root = b.InsertNode(root,25);
+    b.InsertNode(root,20);
+    b.InsertNode(root,30);
     b.InsertNode(root,10);
-    b.InsertNode(root,2);
-    b.InsertNode(root,25);
-    b.InsertNode(root,13);
+    b.InsertNode(root,22);
+    b.InsertNode(root,27);
+    b.InsertNode(root,32);  
+    cout<<"test the inorder traversal"<<endl;
     b.printInOrderBST(root);
-    cout<<"test the search func"<<endl<<endl;
-    BST *found = b.SearchNode(root,25);
+    cout<<"test the search func"<<endl;
+    BST *found = b.SearchNode(root,27);
     if (found == nullptr)
     {
         cout<<"Node not found"<<endl;
@@ -109,7 +132,8 @@ int main()
     {
         cout<<"Node found ...value is "<<found->getdata()<<endl;
     }
-
+    cout<<"test the BFS"<<endl<<endl;
+    b.breadthFirstTraversal(root);
 
 	return 0;
 }
