@@ -1,9 +1,10 @@
 //create a binary search tree
+
 #include<iostream>
 #include<conio.h>
 #include<queue>
-using namespace std;
 
+using namespace std;
 
 class BST
 { 
@@ -11,7 +12,8 @@ class BST
     BST *left;
     BST *right;
     BST * createNode(int val);
-
+    bool IsBSTUtil(BST* root,int min,int max);
+    
     public:
     BST();
     ~BST();
@@ -20,8 +22,7 @@ class BST
     void printInOrderBST(BST *root);
     void breadthFirstTraversal(BST *root); 
     int getdata(){return data;}
-
-    
+    void checkTreeIsBST(BST* root);
 };
 
 BST::BST()
@@ -110,8 +111,57 @@ void BST::breadthFirstTraversal(BST *root)
     }
 }
 
+void BST::checkTreeIsBST(BST* root)
+{ 
+    int min = -500;
+    int max = 500;
+    bool result = false;
+    if (root == nullptr)
+    {
+        cout<<"the tree is empty";
+        return;
+    }
+
+    result = IsBSTUtil(root,min,max);
+    if (true == result)
+    {
+        cout<<"the tree is BST";    
+    }
+    else
+    {
+        cout<<"the tree is not BST";
+    }
+}
+
+//IsBSTUtil(root20,-500,500)
+bool BST::IsBSTUtil(BST* root,int min,int max)
+{
+    if (root == nullptr)
+    {
+        return true;
+    }
+
+    if ( (root->getdata()>min) && (root->getdata()<max)
+    &&   IsBSTUtil(root->left,min,root->getdata())
+    &&   IsBSTUtil(root->right,root->getdata(),max) )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }   
+}
+
+//TODO :-
+//height of binary tree
+// in order successor
+//smallest element or largest element in tree.
+
+
 int main()
 {
+
     BST b, *root=nullptr;
     root = b.InsertNode(root,25);
     b.InsertNode(root,20);
@@ -132,9 +182,12 @@ int main()
     {
         cout<<"Node found ...value is "<<found->getdata()<<endl;
     }
-    cout<<"test the BFS"<<endl<<endl;
+    cout<<"test the BFS"<<endl;
     b.breadthFirstTraversal(root);
 
-	return 0;
+    cout<<"check if tree is BST or not.."<<endl;
+    b.checkTreeIsBST(root);
+    return 0;
 }
+
 
