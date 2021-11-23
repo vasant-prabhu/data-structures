@@ -23,6 +23,7 @@ class BST
     void breadthFirstTraversal(BST *root); 
     int getdata(){return data;}
     void checkTreeIsBST(BST* root);
+    BST* getSuccessor(BST* root, int val);
 };
 
 BST::BST()
@@ -153,16 +154,60 @@ bool BST::IsBSTUtil(BST* root,int min,int max)
     }   
 }
 
+
+// in order successor
+BST* BST::getSuccessor(BST* root, int val)
+{
+   BST* currentNode = SearchNode(root,val);
+   if (currentNode->right)
+   {
+       //case 1 :- when there is a right subtree to the current node, the successor is 
+       //the left most node in that subtree
+       BST* temp = currentNode->right;
+       while (temp->left !=nullptr)
+       {
+           temp = temp->left;
+       }
+       return temp;
+   }
+   else
+   {
+        //case 2 :- in case of only left subtree present , we trace the path from root to the current node , 
+        // keeping track of a trailing successor
+        BST * successor = nullptr;
+        BST * ancestor = root;
+
+        while (ancestor != currentNode)
+        {
+            if (currentNode->getdata() < ancestor->getdata()  ) 
+            {
+                successor = ancestor;
+                ancestor = ancestor->left;            
+            }   
+            else
+            {
+                ancestor = ancestor->right;            
+            }
+        }
+        return successor;            
+   }
+}
+
+
 //TODO :-
 //height of binary tree
-// in order successor
+
 //smallest element or largest element in tree.
 
+//delete a node
+
+//print left/right view of a binary tree
 
 int main()
 {
 
     BST b, *root=nullptr;
+    
     root = b.InsertNode(root,25);
     b.InsertNode(root,20);
     b.InsertNode(root,30);
@@ -187,6 +232,10 @@ int main()
 
     cout<<"check if tree is BST or not.."<<endl;
     b.checkTreeIsBST(root);
+    cout<<endl;
+
+    cout<<"Inorder successor of 10 is ";
+    cout << b.getSuccessor(root,10)->getdata()<<endl;
     return 0;
 }
 
